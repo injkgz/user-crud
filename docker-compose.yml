@@ -7,3 +7,7 @@ services:
       - MONGODB_DATABASE="test"
     ports:
       - 27017:27017
+    volumes:
+      - mongo-db4:/data/db
+volumes:
+  mongo-db4:
