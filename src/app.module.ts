@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
-import { Users } from './users/entity/users.entity';
 import { GroupModule } from './group/group.module';
 
 @Module({
@@ -10,7 +9,7 @@ import { GroupModule } from './group/group.module';
       type: 'mongodb',
       host: 'localhost',
       database: 'test',
-      entities: [Users],
+      entities: ['dist/**/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
     UsersModule,
