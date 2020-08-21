@@ -20,15 +20,23 @@ export class CreateUsersDto {
   email: string;
 
   /**
-   * Name client
+   * Name user
    *
    */
   @IsNotEmpty()
   @Length(3, 50)
   name: string;
 
+   /**
+   * Group ID the user belongs to
+   *
+   */
+  @IsOptional()
+  @Length(36, 255)
+  groupId?: string[];
+
   /**
-   * Full name client
+   * Full name user
    *
    */
   @IsOptional()
@@ -36,7 +44,7 @@ export class CreateUsersDto {
   fullName?: string;
 
   /**
-   * Phone number client
+   * Phone number user
    *
    */
   @IsNotEmpty()

@@ -19,22 +19,30 @@ export class UsersDto {
   email: string;
 
   /**
-   * Name client
+   * Name user
    *
    */
   @Length(3, 50)
   name: string;
 
   /**
-   * Full name client
+   * Full name user
    *
    */
   @IsOptional()
   @Length(3, 50)
   fullName?: string;
 
+ /**
+   * Group ID the user belongs to
+   *
+   */
+  @IsOptional()
+  @Length(3, 50)
+  groupId?: string[];
+
   /**
-   * Phone number client
+   * Phone number user
    *
    */
   @IsPhoneNumber('ZZ')
