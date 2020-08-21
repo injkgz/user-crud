@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { Users } from './users/entity/users.entity';
-import { GroupsModule } from './groups/groups.module';
+import { GroupModule } from './group/group.module';
 
 @Module({
   imports: [
@@ -14,7 +14,7 @@ import { GroupsModule } from './groups/groups.module';
       synchronize: true,
     }),
     UsersModule,
-    GroupsModule,
+    GroupModule,
   ],
 })
 export class AppModule {}

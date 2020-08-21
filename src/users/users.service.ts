@@ -4,7 +4,6 @@ import { Repository } from 'typeorm';
 import { Users } from './entity/users.entity';
 import { CreateUsersDto } from './dto/create-users.dto';
 import { UsersDto } from './dto/users.dto';
-import * as _ from 'lodash';
 
 @Injectable()
 export class UsersService {
@@ -25,7 +24,7 @@ export class UsersService {
     if (user) {
       throw new HttpException('User already exits', 500);
     }
-    const newUser = _.assignIn(new UsersDto(), createUsersDto);
-    return this.usersRepository.save(newUser);
+
+    return this.usersRepository.save(createUsersDto);
   }
 }
