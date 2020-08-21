@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Users } from './entity/users.entity';
 import { CreateUsersDto } from './dto/create-users.dto';
 import { UsersDto } from './dto/users.dto';
+import * as _ from 'lodash';
 
 @Injectable()
 export class UsersService {
@@ -17,6 +18,14 @@ export class UsersService {
   }
 
   async create(createUsersDto: CreateUsersDto): Promise<UsersDto> {
-    return this.usersRepository.save(createUsersDto);
+    const user = await this.usersRepository.findOne({
+      email: createUsersDto.email,
+    });
+
+    if (user) {
+      throw new HttpException('User already exits', 500);
+    }
+    const newUser = _.assignIn(new UsersDto(), createUsersDto);
+    return this.usersRepository.save(newUser);
   }
 }

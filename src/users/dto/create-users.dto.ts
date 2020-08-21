@@ -1,4 +1,10 @@
-import { IsEmail, IsOptional, Length, IsPhoneNumber } from 'class-validator';
+import {
+  IsEmail,
+  IsOptional,
+  Length,
+  IsPhoneNumber,
+  IsNotEmpty,
+} from 'class-validator';
 
 /**
  * CreateClientDto dto class
@@ -8,6 +14,7 @@ export class CreateUsersDto {
    * Email address
    *
    */
+  @IsNotEmpty()
   @IsEmail()
   @Length(3, 70)
   email: string;
@@ -16,6 +23,7 @@ export class CreateUsersDto {
    * Name client
    *
    */
+  @IsNotEmpty()
   @Length(3, 50)
   name: string;
 
@@ -31,6 +39,7 @@ export class CreateUsersDto {
    * Phone number client
    *
    */
+  @IsNotEmpty()
   @IsPhoneNumber('ZZ')
   phone: string;
 }
