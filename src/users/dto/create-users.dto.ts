@@ -27,7 +27,7 @@ export class CreateUsersDto {
   @Length(3, 50)
   name: string;
 
-   /**
+  /**
    * Group ID the user belongs to
    *
    */

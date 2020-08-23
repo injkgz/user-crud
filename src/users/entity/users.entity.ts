@@ -1,4 +1,5 @@
 import { Column, Entity, ObjectIdColumn } from 'typeorm';
+import { Group } from 'src/group/entity/group.entity';
 
 @Entity()
 export class Users {
@@ -12,4 +13,6 @@ export class Users {
   fullName: string;
   @Column()
   phone: string;
+  @Column()
+  groupId?: string[];
 }

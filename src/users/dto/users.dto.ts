@@ -33,12 +33,12 @@ export class UsersDto {
   @Length(3, 50)
   fullName?: string;
 
- /**
+  /**
    * Group ID the user belongs to
    *
    */
   @IsOptional()
-  @Length(3, 50)
+  @Length(36, 255)
   groupId?: string[];
 
   /**
