@@ -23,6 +23,6 @@ export class UsersController {
    */
   @Post()
   addFriend(@Body() userId: string, friendId: string): Promise<UsersDto> {
-    return null;
+    return this.usersService.addFriend(userId, friendId);
   }
 }
