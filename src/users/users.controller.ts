@@ -7,7 +7,7 @@ import { create } from 'domain';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
   /**
    * Create client query
    *
@@ -23,9 +23,6 @@ export class UsersController {
    */
   @Post()
   createUser(@Body() createUsersDto: CreateUsersDto): Promise<UsersDto> {
-    if (createUsersDto.groupId) {
-      
-    }
     return this.usersService.create(createUsersDto);
   }
 }

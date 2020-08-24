@@ -1,6 +1,6 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { Group } from './entity/group.entity';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { GroupDto } from './dto/group.dto';
@@ -14,6 +14,11 @@ export class GroupService {
 
   async findAll(): Promise<Group[]> {
     return this.groupRepository.find();
+  }
+  async findById(groupIds: string[]): Promise<Group[]> {
+    return this.groupRepository.find({
+      id: In(groupIds),
+    });
   }
 
   async create(createGroupDto: CreateGroupDto): Promise<GroupDto> {

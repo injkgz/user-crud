@@ -32,7 +32,7 @@ export class CreateUsersDto {
    *
    */
   @IsOptional()
-  @Length(36, 255, {each: true})
+  @Length(36, 255, { each: true })
   groupId?: string[];
 
   /**
