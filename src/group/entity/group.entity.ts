@@ -2,8 +2,8 @@ import { Column, Entity, ObjectIdColumn } from 'typeorm';
 
 @Entity()
 export class Group {
-  @ObjectIdColumn()
+  @ObjectIdColumn({type:'uuid'})
   id: string;
-  @Column()
+  @Column({type:'varchar'})
   title: string;
 }

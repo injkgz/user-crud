@@ -3,16 +3,16 @@ import { Group } from 'src/group/entity/group.entity';
 
 @Entity()
 export class Users {
-  @ObjectIdColumn()
+  @ObjectIdColumn({type:'uuid'})
   id: string;
-  @Column()
+  @Column({type:'varchar'})
   name: string;
-  @Column()
+  @Column({type:'varchar'})
   email: string;
-  @Column()
+  @Column({type:'varchar'})
   fullName: string;
-  @Column()
+  @Column({type:'varchar'})
   phone: string;
-  @Column()
+  @Column('varchar', {array: true})
   groupId?: string[];
 }
