@@ -2,10 +2,9 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { GroupModule } from './group/group.module';
-import * as process from "process";
 
-const username = process.env.POSTGRES_USER || 'postgres';
-const password = process.env.POSTGRES_PASSWORD || 'example';
+const username = 'postgres';
+const password = 'example';
 
 @Module({
   imports: [

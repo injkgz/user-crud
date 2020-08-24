@@ -5,12 +5,6 @@ import { IsEmail, IsOptional, IsPhoneNumber, Length } from 'class-validator';
  */
 export class UsersDto {
   /**
-   * Unique user ID
-   */
-  @Length(36, 255)
-  id: string;
-
-  /**
    * Email address
    *
    */
@@ -38,7 +32,7 @@ export class UsersDto {
    *
    */
   @IsOptional()
-  @Length(36, 255)
+  @Length(36, 255, {each: true})
   groupId?: string[];
 
   /**

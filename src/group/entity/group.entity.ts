@@ -1,9 +1,9 @@
-import { Column, Entity, ObjectIdColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Group {
-  @ObjectIdColumn({type:'uuid'})
+  @PrimaryGeneratedColumn('uuid')
   id: string;
-  @Column({type:'varchar'})
+  @Column({ type: 'varchar' })
   title: string;
 }

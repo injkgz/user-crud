@@ -5,11 +5,6 @@ import { Length } from 'class-validator';
  */
 export class GroupDto {
   /**
-   * Unique group ID
-   */
-  @Length(36, 255)
-  id: string;
-  /**
    * Title of group
    *
    */

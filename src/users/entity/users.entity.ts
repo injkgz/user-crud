@@ -1,18 +1,18 @@
-import { Column, Entity, ObjectIdColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { Group } from 'src/group/entity/group.entity';
 
 @Entity()
 export class Users {
-  @ObjectIdColumn({type:'uuid'})
+  @PrimaryGeneratedColumn('uuid')
   id: string;
-  @Column({type:'varchar'})
+  @Column({ type: 'varchar' })
   name: string;
-  @Column({type:'varchar'})
+  @Column({ type: 'varchar' })
   email: string;
-  @Column({type:'varchar'})
+  @Column({ type: 'varchar' })
   fullName: string;
-  @Column({type:'varchar'})
+  @Column({ type: 'varchar' })
   phone: string;
-  @Column('varchar', {array: true})
+  @Column('varchar', { array: true })
   groupId?: string[];
 }
