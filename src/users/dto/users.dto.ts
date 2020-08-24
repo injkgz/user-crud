@@ -17,30 +17,24 @@ export class UsersDto {
    *
    */
   @Length(3, 50)
-  name: string;
-
-  /**
-   * Full name user
-   *
-   */
-  @IsOptional()
-  @Length(3, 50)
-  fullName?: string;
+  nickname: string;
 
   /**
    * Group ID the user belongs to
    *
    */
   @IsOptional()
-  @Length(36, 255, { each: true })
+  @Length(10, 255, { each: true })
   groupId?: string[];
 
   /**
-   * Phone number user
+   * FriendsId of user
    *
    */
-  @IsPhoneNumber('ZZ')
-  phone: string;
+  @IsOptional()
+  @Length(10, 255, { each: true })
+  friends?: string[];
+
   /**
    * The "constructor"
    *

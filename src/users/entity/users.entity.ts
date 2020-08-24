@@ -6,13 +6,11 @@ export class Users {
   @PrimaryGeneratedColumn('uuid')
   id: string;
   @Column({ type: 'varchar' })
-  name: string;
+  nickname: string;
   @Column({ type: 'varchar' })
   email: string;
-  @Column({ type: 'varchar' })
-  fullName: string;
-  @Column({ type: 'varchar' })
-  phone: string;
-  @Column('varchar', { array: true })
+  @Column('varchar', { array: true, nullable: true })
   groupId?: string[];
+  @Column('varchar', { array: true, nullable: true })
+  friends?: string[];
 }

@@ -25,29 +25,21 @@ export class CreateUsersDto {
    */
   @IsNotEmpty()
   @Length(3, 50)
-  name: string;
+  nickname: string;
 
   /**
    * Group ID the user belongs to
    *
    */
   @IsOptional()
-  @Length(36, 255, { each: true })
+  @Length(10, 255, { each: true })
   groupId?: string[];
 
   /**
-   * Full name user
+   * FriendsId of user
    *
    */
   @IsOptional()
-  @Length(3, 50)
-  fullName?: string;
-
-  /**
-   * Phone number user
-   *
-   */
-  @IsNotEmpty()
-  @IsPhoneNumber('ZZ')
-  phone: string;
+  @Length(10, 255, { each: true })
+  friends?: string[];
 }

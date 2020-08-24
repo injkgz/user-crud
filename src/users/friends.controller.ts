@@ -5,24 +5,24 @@ import { CreateUsersDto } from './dto/create-users.dto';
 import { UsersDto } from './dto/users.dto';
 import { create } from 'domain';
 
-@Controller('users')
+@Controller('friends')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
   /**
-   * Get all users query
+   * Get all user's friend query
    *
    */
   @Get()
-  findAll(): Promise<Users[]> {
+  getAllFriends(@Body() userId: string): Promise<Users[]> {
     return this.usersService.findAll();
   }
   /**
-   * Create users query
+   * Add friend to user query
    *
    * @param createUsersDto
    */
   @Post()
-  createUser(@Body() createUsersDto: CreateUsersDto): Promise<UsersDto> {
-    return this.usersService.create(createUsersDto);
+  addFriend(@Body() userId: string, friendId: string): Promise<UsersDto> {
+    return null;
   }
 }
