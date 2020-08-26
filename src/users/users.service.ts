@@ -18,6 +18,35 @@ export class UsersService {
     return this.usersRepository.find();
   }
 
+  async removeFriend(userId: string, friendId: string): Promise<UsersDto> {
+    const user = await this.usersRepository.findOne({ id: userId });
+    const friend = await this.usersRepository.findOne({ id: friendId });
+    if (!user || !friend) {
+      throw new HttpException('Choosen user or friend does not exists', 500);
+    }
+    const friends = user.friends;
+    if (!friends) {
+      throw new HttpException("Current user doesn't have any friends!", 500);
+    }
+    const index = friends.indexOf(friend.id);
+    if (index < 0) {
+      throw new HttpException("Users aren't friends!", 500);
+    }
+    friends.splice(index, index);
+    const friendFriends = friend.friends;
+    if (!friendFriends) {
+      throw new HttpException("Current user doesn't have any friends!", 500);
+    }
+    const friendIndex = friends.indexOf(friend.id);
+    if (friendIndex < 0) {
+      throw new HttpException("Users aren't friends!", 500);
+    }
+    friendFriends.splice(friendIndex, friendIndex);
+
+    await this.usersRepository.save({ id: friend.id, friends: friendFriends });
+    return this.usersRepository.save({ id: user.id, friends });
+  }
+
   async addFriend(userId: string, friendId: string): Promise<UsersDto> {
     const user = await this.usersRepository.findOne({ id: userId });
     const friend = await this.usersRepository.findOne({ id: friendId });
