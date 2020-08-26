@@ -20,6 +20,10 @@ export class GroupService {
       id: In(groupIds),
     });
   }
+  async updateById(id: string, createGroupDto: CreateGroupDto): Promise<Group> {
+    const { title } = createGroupDto;
+    return this.groupRepository.save({ id, title });
+  }
 
   async create(createGroupDto: CreateGroupDto): Promise<GroupDto> {
     const group = await this.groupRepository.findOne({
