@@ -21,7 +21,7 @@ export class GroupController {
    * @param createGroupDto
    */
   @Post()
-  createUser(@Body() createGroupDto: CreateGroupDto): Promise<GroupDto> {
+  createGroup(@Body() createGroupDto: CreateGroupDto): Promise<GroupDto> {
     return this.groupService.create(createGroupDto);
   }
 }
