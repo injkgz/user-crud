@@ -1,4 +1,4 @@
-import { IsEmail, IsOptional, IsPhoneNumber, Length } from 'class-validator';
+import { IsEmail, IsOptional, Length } from 'class-validator';
 
 /**
  * UsersDto dto class
