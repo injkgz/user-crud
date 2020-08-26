@@ -21,7 +21,7 @@ export class FriendsController {
    * @param createUsersDto
    */
   @Post()
-  addFriend(@Body() input: EditFriendsDto): Promise<UsersDto> {
+  editFriends(@Body() input: EditFriendsDto): Promise<UsersDto> {
     const { userId, friendId, isAdding } = input;
     if (isAdding) {
       return this.usersService.addFriend(userId, friendId);
