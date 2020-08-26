@@ -24,9 +24,9 @@ export class GroupController {
     return this.groupService.findById([id]);
   }
   /**
-   * update any group by id 
+   * update any group by id
    * @param id id of group
-   * @param createGroupDto object of group fields 
+   * @param createGroupDto object of group fields
    */
   @Patch(':id')
   async update(
