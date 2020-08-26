@@ -1,9 +1,4 @@
-import {
-  IsEmail,
-  IsOptional,
-  Length,
-  IsNotEmpty,
-} from 'class-validator';
+import { IsEmail, IsOptional, Length, IsNotEmpty } from 'class-validator';
 
 /**
  * CreateClientDto dto class

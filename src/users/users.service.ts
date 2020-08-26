@@ -19,14 +19,16 @@ export class UsersService {
   }
 
   async addFriend(userId: string, friendId: string): Promise<UsersDto> {
-    const user = await this.usersRepository.findOne(userId);
-    const friend = await this.usersRepository.findOne(friendId);
-    if (!user && !friend) {
+    const user = await this.usersRepository.findOne({ id: userId });
+    const friend = await this.usersRepository.findOne({ id: friendId });
+    if (!user || !friend) {
       throw new HttpException('Choosen user or friend does not exists', 500);
     }
     let friends = user.friends;
     if (!friends) {
       friends = [];
+    } else if (friends.includes(friend.id)) {
+      throw new HttpException('Users are already friends', 500);
     }
     friends.push(friend.id);
 
@@ -40,7 +42,7 @@ export class UsersService {
     return this.usersRepository.save({ id: user.id, friends });
   }
   async getAllFriends(userId: string): Promise<Users[]> {
-    const user = await this.usersRepository.findOne(userId);
+    const user = await this.usersRepository.findOne({ id: userId });
     return this.usersRepository.findByIds(user.friends);
   }
 
