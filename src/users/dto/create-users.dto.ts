@@ -1,23 +1,24 @@
-import { IsEmail, IsOptional, Length, IsNotEmpty } from 'class-validator';
+import { IsEmail, Length, IsOptional } from 'class-validator';
+import { Field, InputType } from '@nestjs/graphql';
 
 /**
  * CreateClientDto dto class
  */
+@InputType()
 export class CreateUsersDto {
   /**
    * Email address
    *
    */
-  @IsNotEmpty()
+  @Field()
   @IsEmail()
-  @Length(3, 70)
   email: string;
 
   /**
    * Name user
    *
    */
-  @IsNotEmpty()
+  @Field()
   @Length(3, 50)
   nickname: string;
 
@@ -25,6 +26,7 @@ export class CreateUsersDto {
    * Group ID the user belongs to
    *
    */
+  @Field(type => [String], { nullable: true })
   @IsOptional()
   @Length(10, 255, { each: true })
   groupId?: string[];
@@ -33,6 +35,7 @@ export class CreateUsersDto {
    * FriendsId of user
    *
    */
+  @Field(type => [String], { nullable: true })
   @IsOptional()
   @Length(10, 255, { each: true })
   friends?: string[];

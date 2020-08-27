@@ -17,6 +17,9 @@ export class UsersService {
   async findAll(): Promise<Users[]> {
     return this.usersRepository.find();
   }
+  async findOneById(id: string): Promise<Users> {
+    return this.usersRepository.findOne(id);
+  }
 
   async updateById(id: string, nickname: string): Promise<UsersDto> {
     const user = await this.usersRepository.findOne(id);
@@ -81,7 +84,7 @@ export class UsersService {
     return this.usersRepository.findByIds(user.friends);
   }
 
-  async create(createUsersDto: CreateUsersDto): Promise<UsersDto> {
+  async create(createUsersDto: CreateUsersDto): Promise<Users> {
     const user = await this.usersRepository.findOne({
       email: createUsersDto.email,
     });
