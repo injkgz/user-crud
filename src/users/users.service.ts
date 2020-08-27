@@ -18,6 +18,12 @@ export class UsersService {
     return this.usersRepository.find();
   }
 
+  async updateById(id: string, nickname: string): Promise<UsersDto> {
+    const user = await this.usersRepository.findOne(id);
+    user.nickname = nickname;
+    return this.usersRepository.save(user);
+  }
+
   async removeFriend(userId: string, friendId: string): Promise<UsersDto> {
     const user = await this.usersRepository.findOne({ id: userId });
     const friend = await this.usersRepository.findOne({ id: friendId });

@@ -20,7 +20,7 @@ export class GroupController {
    * @param id - id of group
    */
   @Get(':id')
-  async getOne(@Param('id') id: string): Promise<Group[]> {
+  async getOne(@Param('id') id: string): Promise<GroupDto[]> {
     return this.groupService.findById([id]);
   }
   /**
@@ -32,7 +32,7 @@ export class GroupController {
   async update(
     @Param('id') id: string,
     @Body() createGroupDto: CreateGroupDto,
-  ): Promise<Group> {
+  ): Promise<GroupDto> {
     const group = await this.groupService.updateById(id, createGroupDto);
     return group;
   }
