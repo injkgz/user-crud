@@ -10,7 +10,7 @@ import { UsersDto } from './dto/users.dto';
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
-  @Query(returns => Users)
+  @Query(() => Users)
   async user(@Args('id') id: string): Promise<Users> {
     const user = await this.usersService.findOneById(id);
 
@@ -21,12 +21,12 @@ export class UsersResolver {
     return user;
   }
 
-  @Query(returns => [Users])
+  @Query(() => [Users])
   users(): Promise<Users[]> {
     return this.usersService.findAll();
   }
 
-  @Mutation(returns => Users)
+  @Mutation(() => Users)
   async createUser(
     @Args('createUsersDto') createUsersDto: CreateUsersDto,
   ): Promise<Users> {
@@ -39,7 +39,7 @@ export class UsersResolver {
    * @param id id of user
    * @param nickname object of user fields
    */
-  @Mutation(returns => Users)
+  @Mutation(() => Users)
   async updateUser(
     @Args('input') id: string,
     nickname: string,
@@ -50,7 +50,7 @@ export class UsersResolver {
    * Get all user's friend query
    *
    */
-  @Query(returns => [Users])
+  @Query(() => [Users])
   getAllFriends(@Args('userId') userId: string): Promise<Users[]> {
     return this.usersService.getAllFriends(userId);
   }
@@ -59,7 +59,7 @@ export class UsersResolver {
    *
    * @param createUsersDto
    */
-  @Mutation(returns => Users)
+  @Mutation(() => Users)
   editFriends(@Args('input') input: EditFriendsDto): Promise<UsersDto> {
     const { userId, friendId, isAdding } = input;
     if (isAdding) {
