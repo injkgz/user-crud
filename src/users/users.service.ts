@@ -21,13 +21,13 @@ export class UsersService {
     return this.usersRepository.findOne(id);
   }
 
-  async updateById(id: string, nickname: string): Promise<UsersDto> {
+  async updateById(id: string, nickname: string): Promise<Users> {
     const user = await this.usersRepository.findOne(id);
     user.nickname = nickname;
     return this.usersRepository.save(user);
   }
 
-  async removeFriend(userId: string, friendId: string): Promise<UsersDto> {
+  async removeFriend(userId: string, friendId: string): Promise<Users> {
     const user = await this.usersRepository.findOne({ id: userId });
     const friend = await this.usersRepository.findOne({ id: friendId });
     if (!user || !friend) {
@@ -81,7 +81,11 @@ export class UsersService {
   }
   async getAllFriends(userId: string): Promise<Users[]> {
     const user = await this.usersRepository.findOne({ id: userId });
-    return this.usersRepository.findByIds(user.friends);
+    if (user.friends) {
+      return this.usersRepository.findByIds(user.friends);
+    } else {
+      throw new HttpException('User does not have any friends', 500);
+    }
   }
 
   async create(createUsersDto: CreateUsersDto): Promise<Users> {
