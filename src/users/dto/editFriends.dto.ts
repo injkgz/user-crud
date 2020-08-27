@@ -19,7 +19,7 @@ export class EditFriendsDto {
    * Name user
    *
    */
-  @Field(type => [String], { nullable: true })
+  @Field(() => [String], { nullable: true })
   @IsNotEmpty()
   @Length(10, 255)
   friendId: string;
@@ -28,7 +28,7 @@ export class EditFriendsDto {
    *
    * if true: we add friend, else we remove friend
    */
-  @Field(type => Boolean)
+  @Field(() => Boolean)
   @IsNotEmpty()
   @IsBoolean()
   isAdding: boolean;

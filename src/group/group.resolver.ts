@@ -1,17 +1,17 @@
-import { Body, Controller, Get, Post, Param, Patch } from '@nestjs/common';
 import { GroupService } from './group.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { GroupDto } from './dto/group.dto';
 import { Group } from './entity/group.entity';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
-@Controller('group')
-export class GroupController {
+@Resolver(Group)
+export class GroupResolver {
   constructor(private readonly groupService: GroupService) {}
   /**
    * Get groups query
    *
    */
-  @Get()
+  @Query(() => [GroupDto])
   findAll(): Promise<Group[]> {
     return this.groupService.findAll();
   }
@@ -19,8 +19,8 @@ export class GroupController {
    * Get groups by ID
    * @param id - id of group
    */
-  @Get(':id')
-  async getOne(@Param('id') id: string): Promise<GroupDto[]> {
+  @Query(() => [GroupDto])
+  async getOne(@Args('id') id: string): Promise<GroupDto[]> {
     return this.groupService.findById([id]);
   }
   /**
@@ -28,10 +28,10 @@ export class GroupController {
    * @param id id of group
    * @param createGroupDto object of group fields
    */
-  @Patch(':id')
+  @Mutation(() => [GroupDto])
   async update(
-    @Param('id') id: string,
-    @Body() createGroupDto: CreateGroupDto,
+    @Args('input') id: string,
+    createGroupDto: CreateGroupDto,
   ): Promise<GroupDto> {
     const group = await this.groupService.updateById(id, createGroupDto);
     return group;
@@ -42,8 +42,10 @@ export class GroupController {
    *
    * @param createGroupDto
    */
-  @Post()
-  createGroup(@Body() createGroupDto: CreateGroupDto): Promise<GroupDto> {
+  @Mutation(() => GroupDto)
+  createGroup(
+    @Args('createGroupDto') createGroupDto: CreateGroupDto,
+  ): Promise<GroupDto> {
     return this.groupService.create(createGroupDto);
   }
 }
