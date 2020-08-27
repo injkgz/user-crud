@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
+import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { GroupModule } from './group/group.module';
+import { join } from 'path';
 
 const username = 'postgres';
 const password = 'example';
@@ -20,6 +22,7 @@ const password = 'example';
     }),
     UsersModule,
     GroupModule,
+    GraphQLModule.forRoot({autoSchemaFile: join(process.cwd(), 'src/schema.gql')}),
   ],
 })
 export class AppModule {}
