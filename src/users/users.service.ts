@@ -25,35 +25,23 @@ export class UsersService {
   }
 
   async removeFriend(userId: string, friendId: string): Promise<UsersModel> {
-    const user = await this.usersModel.findOne({ id: userId });
-    const friend = await this.usersModel.findOne({ id: friendId });
+    const user = await this.usersModel.findOne({ _id: userId });
+    const friend = await this.usersModel.findOne({ _id: friendId });
     if (!user || !friend) {
       throw new HttpException('Choosen user or friend does not exists', 500);
     }
-    const friends = user.friends;
-    if (!friends) {
-      throw new HttpException("Current user doesn't have any friends!", 500);
-    }
-    const index = friends.indexOf(friend._id);
-    if (index < 0) {
-      throw new HttpException("Users aren't friends!", 500);
-    }
-    friends.splice(index, index);
-    const friendFriends = friend.friends;
-    if (!friendFriends) {
-      throw new HttpException("Current user doesn't have any friends!", 500);
-    }
-    const friendIndex = friends.indexOf(friend._id);
-    if (friendIndex < 0) {
-      throw new HttpException("Users aren't friends!", 500);
-    }
-    friendFriends.splice(friendIndex, friendIndex);
+    user.friends = user.friends.filter(u => u !== friendId);
+    friend.friends = friend.friends.filter(u => u !== userId);
 
     await this.usersModel.updateOne(
-      { id: friend._id },
-      { friends: friendFriends },
+      { _id: friend._id },
+      { friends: friend.friends },
     );
-    return this.usersModel.updateOne({ id: user._id }, { friends });
+    return this.usersModel.findOneAndUpdate(
+      { _id: user._id },
+      { friends: user.friends },
+      { new: true },
+    );
   }
 
   async addFriend(userId: string, friendId: string): Promise<UsersModel> {
@@ -62,25 +50,23 @@ export class UsersService {
     if (!user || !friend) {
       throw new HttpException('Choosen user or friend does not exists', 500);
     }
-    let friends = user.friends;
-    if (!friends) {
-      friends = [];
-    } else if (friends.includes(friend._id)) {
-      throw new HttpException('Users are already friends', 500);
-    }
-    friends.push(friend._id);
-
-    let friendFriends = friend.friends;
-    if (!friendFriends) {
-      friendFriends = [];
-    }
-    friendFriends.push(user._id);
-    await this.usersModel.updateOne(
+    user.friends = user.friends.filter(u => u !== friendId);
+    friend.friends = friend.friends.filter(u => u !== userId);
+    user.friends.push(friendId);
+    friend.friends.push(userId);
+    const { ok } = await this.usersModel.updateOne(
       { _id: friend._id },
-      { friends: friendFriends },
+      { friends: friend.friends },
     );
-
-    return this.usersModel.updateOne({ _id: user._id }, { friends });
+    if (ok > 0) {
+      return this.usersModel.findOneAndUpdate(
+        { _id: user._id },
+        { friends: user.friends },
+        { new: true },
+      );
+    } else {
+      throw new HttpException('Error while adding friends', 500);
+    }
   }
   async getAllFriends(userId: string): Promise<UsersModel[]> {
     const user = await this.usersModel.findOne({ id: userId });

@@ -6,7 +6,7 @@ import { EditFriendsDto } from './input/editFriends.type';
 import { Users } from './entity/users.schema';
 import { UsersModel } from './type/users.model';
 
-@Resolver(()=>Users)
+@Resolver(() => Users)
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
@@ -59,11 +59,11 @@ export class UsersResolver {
    *
    * @param createUsersDto
    */
-  @Mutation(() => Boolean)
+  @Mutation(() => UsersModel)
   async editFriends(@Args('input') input: EditFriendsDto): Promise<UsersModel> {
     const { userId, friendId, isAdding } = input;
     if (isAdding) {
-      return this.usersService.addFriend(userId, friendId);;
+      return this.usersService.addFriend(userId, friendId);
     } else {
       return this.usersService.removeFriend(userId, friendId);
     }
