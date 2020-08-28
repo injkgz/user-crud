@@ -1,32 +1,31 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, In } from 'typeorm';
 import { Group } from './entity/group.entity';
 import { CreateGroupDto } from './dto/create-group.dto';
-import { GroupDto } from './dto/group.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class GroupService {
   constructor(
-    @InjectRepository(Group)
-    private readonly groupRepository: Repository<Group>,
+    @InjectModel(Group.name)
+    private readonly groupModel: Model<Group>,
   ) {}
 
   async findAll(): Promise<Group[]> {
-    return this.groupRepository.find();
+    return this.groupModel.find();
   }
   async findById(groupIds: string[]): Promise<Group[]> {
-    return this.groupRepository.find({
-      id: In(groupIds),
+    return this.groupModel.find({
+      _id: { $in: groupIds },
     });
   }
   async updateById(id: string, createGroupDto: CreateGroupDto): Promise<Group> {
     const { title } = createGroupDto;
-    return this.groupRepository.save({ id, title });
+    return this.groupModel.updateOne({ id }, { title });
   }
 
-  async create(createGroupDto: CreateGroupDto): Promise<GroupDto> {
-    const group = await this.groupRepository.findOne({
+  async create(createGroupDto: CreateGroupDto): Promise<Group> {
+    const group = await this.groupModel.findOne({
       title: createGroupDto.title,
     });
 
@@ -34,6 +33,6 @@ export class GroupService {
       throw new HttpException('Group already exits', 500);
     }
 
-    return this.groupRepository.save(createGroupDto);
+    return this.groupModel.create(createGroupDto);
   }
 }

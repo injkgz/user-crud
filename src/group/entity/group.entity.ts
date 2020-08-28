@@ -1,9 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { ObjectId } from 'mongodb';
+import { Document } from 'mongoose';
 
-@Entity()
-export class Group {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-  @Column({ type: 'varchar' })
+@Schema()
+export class Group extends Document {
+  @Prop({ type: ObjectId })
+  id: ObjectId;
+  @Prop()
   title: string;
 }
+export const GroupSchema = SchemaFactory.createForClass(Group);

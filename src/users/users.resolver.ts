@@ -1,17 +1,17 @@
 import { NotFoundException } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Users } from './type/users.model';
 import { UsersService } from './users.service';
-import { CreateUsersDto } from './dto/create-users.dto';
-import { EditFriendsDto } from './dto/editFriends.dto';
-import { UsersDto } from './dto/users.dto';
+import { CreateUsersDto } from './input/create-users.type';
+import { EditFriendsDto } from './input/editFriends.type';
+import { Users } from './entity/users.schema';
+import { UsersModel } from './type/users.model';
 
-@Resolver(Users)
+@Resolver(()=>Users)
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
-  @Query(() => Users)
-  async user(@Args('id') id: string): Promise<Users> {
+  @Query(() => UsersModel)
+  async user(@Args('id') id: string): Promise<UsersModel> {
     const user = await this.usersService.findOneById(id);
 
     if (!user) {
@@ -21,17 +21,17 @@ export class UsersResolver {
     return user;
   }
 
-  @Query(() => [Users])
-  users(): Promise<Users[]> {
+  @Query(() => [UsersModel])
+  users(): Promise<UsersModel[]> {
     return this.usersService.findAll();
   }
 
-  @Mutation(() => Users)
+  @Mutation(() => UsersModel)
   async createUser(
     @Args('createUsersDto') createUsersDto: CreateUsersDto,
-  ): Promise<Users> {
-    const recipe = await this.usersService.create(createUsersDto);
-    return recipe;
+  ): Promise<UsersModel> {
+    const user = await this.usersService.create(createUsersDto);
+    return user;
   }
 
   /**
@@ -39,19 +39,19 @@ export class UsersResolver {
    * @param id id of user
    * @param nickname object of user fields
    */
-  @Mutation(() => Users)
+  @Mutation(() => UsersModel)
   async updateUser(
     @Args('input') id: string,
     nickname: string,
-  ): Promise<Users> {
+  ): Promise<UsersModel> {
     return await this.usersService.updateById(id, nickname);
   }
   /**
    * Get all user's friend query
    *
    */
-  @Query(() => [Users])
-  getAllFriends(@Args('userId') userId: string): Promise<Users[]> {
+  @Query(() => [UsersModel])
+  getAllFriends(@Args('userId') userId: string): Promise<UsersModel[]> {
     return this.usersService.getAllFriends(userId);
   }
   /**
@@ -59,8 +59,8 @@ export class UsersResolver {
    *
    * @param createUsersDto
    */
-  @Mutation(() => Users)
-  editFriends(@Args('input') input: EditFriendsDto): Promise<UsersDto> {
+  @Mutation(() => UsersModel)
+  editFriends(@Args('input') input: EditFriendsDto): Promise<UsersModel> {
     const { userId, friendId, isAdding } = input;
     if (isAdding) {
       return this.usersService.addFriend(userId, friendId);

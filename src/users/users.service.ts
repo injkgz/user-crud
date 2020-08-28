@@ -1,35 +1,32 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Users } from './entity/users.entity';
-import { CreateUsersDto } from './dto/create-users.dto';
-import { UsersDto } from './dto/users.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { CreateUsersDto } from './input/create-users.type';
 import { GroupService } from 'src/group/group.service';
+import { Model } from 'mongoose';
+import { Users } from './entity/users.schema';
+import { UsersModel } from './type/users.model';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(Users)
-    private readonly usersRepository: Repository<Users>,
+    @InjectModel(Users.name) private readonly usersModel: Model<Users>,
     private groupsService: GroupService,
   ) {}
 
-  async findAll(): Promise<Users[]> {
-    return this.usersRepository.find();
+  async findAll(): Promise<UsersModel[]> {
+    return this.usersModel.find();
   }
-  async findOneById(id: string): Promise<Users> {
-    return this.usersRepository.findOne(id);
-  }
-
-  async updateById(id: string, nickname: string): Promise<Users> {
-    const user = await this.usersRepository.findOne(id);
-    user.nickname = nickname;
-    return this.usersRepository.save(user);
+  async findOneById(id: string): Promise<UsersModel> {
+    return this.usersModel.findOne({ id });
   }
 
-  async removeFriend(userId: string, friendId: string): Promise<Users> {
-    const user = await this.usersRepository.findOne({ id: userId });
-    const friend = await this.usersRepository.findOne({ id: friendId });
+  async updateById(id: string, nickname: string): Promise<UsersModel> {
+    return this.usersModel.updateOne({ id }, { nickname });
+  }
+
+  async removeFriend(userId: string, friendId: string): Promise<UsersModel> {
+    const user = await this.usersModel.findOne({ id: userId });
+    const friend = await this.usersModel.findOne({ id: friendId });
     if (!user || !friend) {
       throw new HttpException('Choosen user or friend does not exists', 500);
     }
@@ -37,7 +34,7 @@ export class UsersService {
     if (!friends) {
       throw new HttpException("Current user doesn't have any friends!", 500);
     }
-    const index = friends.indexOf(friend.id);
+    const index = friends.indexOf(friend._id);
     if (index < 0) {
       throw new HttpException("Users aren't friends!", 500);
     }
@@ -46,50 +43,56 @@ export class UsersService {
     if (!friendFriends) {
       throw new HttpException("Current user doesn't have any friends!", 500);
     }
-    const friendIndex = friends.indexOf(friend.id);
+    const friendIndex = friends.indexOf(friend._id);
     if (friendIndex < 0) {
       throw new HttpException("Users aren't friends!", 500);
     }
     friendFriends.splice(friendIndex, friendIndex);
 
-    await this.usersRepository.save({ id: friend.id, friends: friendFriends });
-    return this.usersRepository.save({ id: user.id, friends });
+    await this.usersModel.updateOne(
+      { id: friend._id },
+      { friends: friendFriends },
+    );
+    return this.usersModel.updateOne({ id: user._id }, { friends });
   }
 
-  async addFriend(userId: string, friendId: string): Promise<UsersDto> {
-    const user = await this.usersRepository.findOne({ id: userId });
-    const friend = await this.usersRepository.findOne({ id: friendId });
+  async addFriend(userId: string, friendId: string): Promise<UsersModel> {
+    const user = await this.usersModel.findOne({ id: userId });
+    const friend = await this.usersModel.findOne({ id: friendId });
     if (!user || !friend) {
       throw new HttpException('Choosen user or friend does not exists', 500);
     }
     let friends = user.friends;
     if (!friends) {
       friends = [];
-    } else if (friends.includes(friend.id)) {
+    } else if (friends.includes(friend._id)) {
       throw new HttpException('Users are already friends', 500);
     }
-    friends.push(friend.id);
+    friends.push(friend._id);
 
     let friendFriends = friend.friends;
     if (!friendFriends) {
       friendFriends = [];
     }
-    friendFriends.push(user.id);
-    await this.usersRepository.save({ id: friend.id, friends: friendFriends });
+    friendFriends.push(user._id);
+    await this.usersModel.updateOne(
+      { id: friend._id },
+      { friends: friendFriends },
+    );
 
-    return this.usersRepository.save({ id: user.id, friends });
+    return this.usersModel.updateOne({ id: user.id }, { friends });
   }
-  async getAllFriends(userId: string): Promise<Users[]> {
-    const user = await this.usersRepository.findOne({ id: userId });
+  async getAllFriends(userId: string): Promise<UsersModel[]> {
+    const user = await this.usersModel.findOne({ id: userId });
     if (user.friends) {
-      return this.usersRepository.findByIds(user.friends);
+      return this.usersModel.find(user.friends);
     } else {
       throw new HttpException('User does not have any friends', 500);
     }
   }
 
-  async create(createUsersDto: CreateUsersDto): Promise<Users> {
-    const user = await this.usersRepository.findOne({
+  async create(createUsersDto: CreateUsersDto): Promise<UsersModel> {
+    const user = await this.usersModel.findOne({
       email: createUsersDto.email,
     });
 
@@ -103,6 +106,6 @@ export class UsersService {
       }
     }
 
-    return this.usersRepository.save(createUsersDto);
+    return this.usersModel.create(createUsersDto);
   }
 }
