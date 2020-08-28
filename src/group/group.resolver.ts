@@ -1,5 +1,5 @@
 import { GroupService } from './group.service';
-import { CreateGroupDto } from './dto/create-group.dto';
+import { CreateGroupDto } from './input/create-group.input';
 import { Group } from './entity/group.entity';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GroupType } from './type/group.model';
