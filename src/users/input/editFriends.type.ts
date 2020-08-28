@@ -19,7 +19,7 @@ export class EditFriendsDto {
    * Name user
    *
    */
-  @Field(() => [String], { nullable: true })
+  @Field()
   @IsNotEmpty()
   @Length(10, 255)
   friendId: string;

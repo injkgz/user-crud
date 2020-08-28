@@ -28,7 +28,7 @@ export class CreateUsersDto {
    */
   @Field(() => [String], { nullable: true })
   @IsOptional()
-  @Length(10, 255, { each: true })
+  @Length(5, 255, { each: true })
   groupId?: string[];
 
   /**
@@ -37,6 +37,6 @@ export class CreateUsersDto {
    */
   @Field(() => [String], { nullable: true })
   @IsOptional()
-  @Length(10, 255, { each: true })
+  @Length(5, 255, { each: true })
   friends?: string[];
 }

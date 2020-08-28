@@ -57,8 +57,8 @@ export class UsersService {
   }
 
   async addFriend(userId: string, friendId: string): Promise<UsersModel> {
-    const user = await this.usersModel.findOne({ id: userId });
-    const friend = await this.usersModel.findOne({ id: friendId });
+    const user = await this.usersModel.findOne({ _id: userId });
+    const friend = await this.usersModel.findOne({ _id: friendId });
     if (!user || !friend) {
       throw new HttpException('Choosen user or friend does not exists', 500);
     }
@@ -76,11 +76,11 @@ export class UsersService {
     }
     friendFriends.push(user._id);
     await this.usersModel.updateOne(
-      { id: friend._id },
+      { _id: friend._id },
       { friends: friendFriends },
     );
 
-    return this.usersModel.updateOne({ id: user.id }, { friends });
+    return this.usersModel.updateOne({ _id: user._id }, { friends });
   }
   async getAllFriends(userId: string): Promise<UsersModel[]> {
     const user = await this.usersModel.findOne({ id: userId });

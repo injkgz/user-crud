@@ -59,11 +59,11 @@ export class UsersResolver {
    *
    * @param createUsersDto
    */
-  @Mutation(() => UsersModel)
-  editFriends(@Args('input') input: EditFriendsDto): Promise<UsersModel> {
+  @Mutation(() => Boolean)
+  async editFriends(@Args('input') input: EditFriendsDto): Promise<UsersModel> {
     const { userId, friendId, isAdding } = input;
     if (isAdding) {
-      return this.usersService.addFriend(userId, friendId);
+      return this.usersService.addFriend(userId, friendId);;
     } else {
       return this.usersService.removeFriend(userId, friendId);
     }
