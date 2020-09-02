@@ -5,9 +5,12 @@ import { GroupService } from 'src/group/group.service';
 import { Model } from 'mongoose';
 import { Users } from './entity/users.schema';
 import { UsersModel } from './type/users.model';
+import { Engine } from 'json-rules-engine';
+import { request, gql } from 'graphql-request';
 
 @Injectable()
 export class UsersService {
+  private ruleEngine = new Engine();
   constructor(
     @InjectModel(Users.name) private readonly usersModel: Model<Users>,
     private groupsService: GroupService,
@@ -78,20 +81,41 @@ export class UsersService {
   }
 
   async create(createUsersDto: CreateUsersDto): Promise<UsersModel> {
-    const user = await this.usersModel.findOne({
-      email: createUsersDto.email,
-    });
-
-    if (user) {
-      throw new HttpException('User already exits', 500);
-    }
-    if (createUsersDto.groupId) {
-      const groups = await this.groupsService.findById(createUsersDto.groupId);
-      if (groups.length !== createUsersDto.groupId.length) {
-        throw new HttpException('One of groupIds is invalid', 500);
+    const query = gql`
+      {
+        rules(type: "user")
       }
-    }
+    `;
+    let { rules } = await request('http://localhost:3001/graphql', query);
+    rules = JSON.parse(rules);
+    this.ruleEngine.addRule(rules);
+    const fact = { user: createUsersDto };
+    const results = await this.ruleEngine.run(fact).catch(err => {
+      throw new HttpException(err, 500);
+    });
+    if (!results.events.length) {
+      throw new HttpException(
+        "It's unable to create group with this title",
+        500,
+      );
+    } else {
+      const user = await this.usersModel.findOne({
+        email: createUsersDto.email,
+      });
 
-    return this.usersModel.create(createUsersDto);
+      if (user) {
+        throw new HttpException('User already exits', 500);
+      }
+      if (createUsersDto.groupId) {
+        const groups = await this.groupsService.findById(
+          createUsersDto.groupId,
+        );
+        if (groups.length !== createUsersDto.groupId.length) {
+          throw new HttpException('One of groupIds is invalid', 500);
+        }
+      }
+
+      return this.usersModel.create(createUsersDto);
+    }
   }
 }

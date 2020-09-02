@@ -33,7 +33,6 @@ export class GroupService {
       }
     `;
     let { rules } = await request('http://localhost:3001/graphql', query);
-    console.log(rules);
     rules = JSON.parse(rules);
     this.ruleEngine.addRule(rules);
     const fact = { group: createGroupDto };
