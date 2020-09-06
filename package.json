@@ -32,7 +32,7 @@
     "class-transformer": "^0.3.1",
     "class-validator": "^0.12.2",
     "graphql": "^15.3.0",
-    "graphql-request": "^3.0.0",
+    "graphql-request": "^3.1.0",
     "graphql-tools": "^6.1.0",
     "json-rules-engine": "^5.0.3",
     "lodash": "^4.17.20",
