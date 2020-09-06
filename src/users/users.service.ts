@@ -89,7 +89,7 @@ export class UsersService {
     let { rules } = await request('http://localhost:3001/graphql', query);
     rules = JSON.parse(rules);
     this.ruleEngine.addRule(rules);
-    const fact = { user: createUsersDto };
+    const fact = { users: createUsersDto };
     const results = await this.ruleEngine.run(fact).catch(err => {
       throw new HttpException(err, 500);
     });
