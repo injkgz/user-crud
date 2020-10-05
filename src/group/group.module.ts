@@ -5,10 +5,10 @@ import { Group, GroupSchema } from './entity/group.entity';
 import { GroupResolver } from './group.resolver';
 
 @Module({
-  providers: [GroupService, GroupResolver],
   imports: [
     MongooseModule.forFeature([{ name: Group.name, schema: GroupSchema }]),
   ],
+  providers: [GroupService, GroupResolver],
   exports: [GroupService],
 })
 export class GroupModule {}

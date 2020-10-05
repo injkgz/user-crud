@@ -32,9 +32,11 @@ export class GroupService {
         rules(type: "group")
       }
     `;
-    let { rules } = await request('http://localhost:3001/graphql', query);
-    rules = JSON.parse(rules);
-    this.ruleEngine.addRule(rules);
+    const { rules } = await request('http://localhost:3001/graphql', query);
+    console.log('Rules = ', rules);
+    const parsedRules = JSON.parse(rules);
+    console.log('Parsed rules = ', parsedRules);
+    this.ruleEngine.addRule(parsedRules);
     const fact = { group: createGroupDto };
     const results = await this.ruleEngine.run(fact).catch(err => {
       throw new HttpException(err, 500);
